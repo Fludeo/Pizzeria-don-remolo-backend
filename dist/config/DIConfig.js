@@ -24,13 +24,53 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const rsdi_1 = __importStar(require("rsdi"));
+const sequelize_1 = require("sequelize");
 const user_service_1 = require("../modules/user/application/service/user.service");
+const user_model_1 = require("../modules/user/infrastructure/user.model");
 const user_repository_1 = require("../modules/user/infrastructure/user.repository");
 const user_controller_1 = require("../modules/user/interface/user.controller");
-const container = new rsdi_1.default();
+const dbConfig = () => {
+    if (process.env.PROJECT_STATUS === 'development') {
+        const sequelize = new sequelize_1.Sequelize({
+            dialect: 'sqlite',
+            storage: './data/development_database.db'
+        });
+        return sequelize;
+    }
+    if (process.env.PROJECT_STATUS === 'test') {
+        const sequelize = new sequelize_1.Sequelize('sqlite::memory:');
+        return sequelize;
+    }
+    if (process.env.PROJECT_STATUS === 'production') {
+        const sequelize = new sequelize_1.Sequelize({
+            dialect: 'sqlite',
+            storage: './data/production_database.db'
+        });
+        return sequelize;
+    }
+    throw Error('PROJECT_STATUS env variable not found');
+};
+const configureUserModel = (container) => {
+    return user_model_1.UserModel.setup(container.get('sequelize'));
+};
+const AddCommonDefinitions = (container) => {
+    container.add({
+        sequelize: (0, rsdi_1.factory)(dbConfig)
+    });
+};
 const AddUserDefinitions = (container) => {
     container.add({
         UserController: (0, rsdi_1.object)(user_controller_1.UserController).construct((0, rsdi_1.use)(user_service_1.UserService), (0, rsdi_1.use)(user_repository_1.UserRepository)),
         UserService: (0, rsdi_1.object)(user_service_1.UserService).construct((0, rsdi_1.use)(user_repository_1.UserRepository)),
+        UserModel: (0, rsdi_1.factory)(configureUserModel),
+        UserRepository: (0, rsdi_1.object)(user_repository_1.UserRepository).construct((0, rsdi_1.use)(user_model_1.UserModel))
     });
 };
+function ConfigDIC() {
+    const container = new rsdi_1.default();
+    AddCommonDefinitions(container);
+    AddUserDefinitions(container);
+    container.get('sequelize').sync();
+    return container;
+}
+exports.default = ConfigDIC;

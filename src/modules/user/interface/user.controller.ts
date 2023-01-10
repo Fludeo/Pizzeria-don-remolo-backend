@@ -1,4 +1,4 @@
-import { Application, NextFunction, Response, Request } from 'express'
+import { Application } from 'express'
 
 import { UserService } from '../application/service/user.service'
 import { UserRepository } from '../infrastructure/user.repository'
