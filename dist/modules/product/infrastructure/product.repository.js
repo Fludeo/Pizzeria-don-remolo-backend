@@ -9,22 +9,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserService = void 0;
-const user_entity_1 = require("../../domain/user.entity");
-// import { type UserRepository } from '../../infrastructure/user.repository'
-const UserEntityNotDefined_1 = require("../error/UserEntityNotDefined");
-class UserService {
-    constructor(userRepository) {
-        this.userRepository = userRepository;
+exports.ProductRepository = void 0;
+const fromModelToEntity_1 = require("../application/mapper/fromModelToEntity");
+class ProductRepository {
+    constructor(productModel) {
+        this.productModel = productModel;
     }
-    addUser(user) {
+    saveProduct(product) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!(user instanceof user_entity_1.User)) {
-                throw new UserEntityNotDefined_1.UserEntityNotDefined();
-            }
-            const savedUser = yield this.userRepository.saveUser(user);
-            return savedUser;
+            const savedProduct = yield this.productModel.create(product, { isNewRecord: Number.isNaN(product.id) });
+            return (0, fromModelToEntity_1.fromModelToEntity)(savedProduct);
         });
     }
 }
-exports.UserService = UserService;
+exports.ProductRepository = ProductRepository;

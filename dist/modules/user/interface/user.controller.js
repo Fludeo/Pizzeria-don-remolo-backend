@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
+// import { UserRepository } from '../infrastructure/user.repository'
 class UserController {
     constructor(userService, userRepository) {
         this.userService = userService;

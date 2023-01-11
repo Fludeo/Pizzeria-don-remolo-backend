@@ -15,6 +15,16 @@ class UserRepository {
     constructor(userModel) {
         this.userModel = userModel;
     }
+    getUserById(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            throw new Error('Method not implemented.');
+        });
+    }
+    getAllUser() {
+        return __awaiter(this, void 0, void 0, function* () {
+            throw new Error('Method not implemented.');
+        });
+    }
     saveUser(user) {
         return __awaiter(this, void 0, void 0, function* () {
             const savedUser = yield this.userModel.create(user, { isNewRecord: Number.isNaN(user.id) });
