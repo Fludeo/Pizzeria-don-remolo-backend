@@ -1,5 +1,8 @@
 node_modules
 .env
+.env.test
 
-dist/
-data/
+
+dist
+data
+coverage
