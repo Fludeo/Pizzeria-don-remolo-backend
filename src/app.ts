@@ -2,6 +2,7 @@ import express, { type NextFunction, type Response, type Request } from 'express
 import ConfigDIC from './config/DIConfig'
 import { initUserModule } from './modules/user/user.module'
 import cors from 'cors'
+import { initProductModule } from './modules/product/product.module'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config()
 const app = express()
@@ -15,6 +16,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 initUserModule(app, container)
+initProductModule(app, container)
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.log(err)

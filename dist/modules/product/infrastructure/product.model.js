@@ -12,11 +12,19 @@ class ProductModel extends sequelize_1.Model {
                 allowNull: false,
                 unique: true
             },
+            name: {
+                type: sequelize_1.DataTypes.STRING,
+                allowNull: false
+            },
             description: {
                 type: sequelize_1.DataTypes.STRING,
                 allowNull: false
             },
             image: {
+                type: sequelize_1.DataTypes.STRING,
+                allowNull: false
+            },
+            category: {
                 type: sequelize_1.DataTypes.STRING,
                 allowNull: false
             },

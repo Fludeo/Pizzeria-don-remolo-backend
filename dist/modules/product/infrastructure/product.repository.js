@@ -21,5 +21,11 @@ class ProductRepository {
             return (0, fromModelToEntity_1.fromModelToEntity)(savedProduct);
         });
     }
+    getAllProducts() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const products = yield this.productModel.findAll();
+            return products === null ? null : products.map((product) => (0, fromModelToEntity_1.fromModelToEntity)(product));
+        });
+    }
 }
 exports.ProductRepository = ProductRepository;

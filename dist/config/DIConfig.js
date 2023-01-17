@@ -25,6 +25,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const rsdi_1 = __importStar(require("rsdi"));
 const sequelize_1 = require("sequelize");
+const product_model_1 = require("../modules/product/infrastructure/product.model");
+const product_module_1 = require("../modules/product/product.module");
 const user_model_1 = require("../modules/user/infrastructure/user.model");
 const user_module_1 = require("../modules/user/user.module");
 const dbConfig = () => {
@@ -51,6 +53,9 @@ const dbConfig = () => {
 const configureUserModel = (container) => {
     return user_model_1.UserModel.setup(container.get('sequelize'));
 };
+const configureProductModel = (container) => {
+    return product_model_1.ProductModel.setup(container.get('sequelize'));
+};
 const AddCommonDefinitions = (container) => {
     container.add({
         sequelize: (0, rsdi_1.factory)(dbConfig)
@@ -64,10 +69,19 @@ const AddUserDefinitions = (container) => {
         UserRepository: (0, rsdi_1.object)(user_module_1.UserRepository).construct((0, rsdi_1.use)(user_model_1.UserModel))
     });
 };
+const AddProductDefinitions = (container) => {
+    container.add({
+        ProductController: (0, rsdi_1.object)(product_module_1.ProductController).construct((0, rsdi_1.use)(product_module_1.ProductService), (0, rsdi_1.use)(product_module_1.ProductRepository)),
+        ProductService: (0, rsdi_1.object)(product_module_1.ProductService).construct((0, rsdi_1.use)(product_module_1.ProductRepository)),
+        ProductModel: (0, rsdi_1.factory)(configureProductModel),
+        ProductRepository: (0, rsdi_1.object)(product_module_1.ProductRepository).construct((0, rsdi_1.use)(product_model_1.ProductModel))
+    });
+};
 function ConfigDIC() {
     const container = new rsdi_1.default();
     AddCommonDefinitions(container);
     AddUserDefinitions(container);
+    AddProductDefinitions(container);
     container.get('sequelize').sync();
     return container;
 }

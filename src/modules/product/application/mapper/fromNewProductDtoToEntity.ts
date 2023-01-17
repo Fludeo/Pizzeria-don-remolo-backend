@@ -1,26 +1,24 @@
 import { Product } from '../../domain/product.entity'
+import { NewProductDto } from '../dto/newproduct.dto'
 
-export const fromModelToEntity = ({
-  id,
+export const fromNewProductDtoToEntity = ({
   name,
   description,
   category,
   image,
   price,
-  stock,
-  createdAt,
-  updatedAt
-}: any): Product => {
+  stock
+
+}: NewProductDto): Product => {
   const productEntity = new Product(
-    id,
+    undefined,
     name,
     description,
     image,
     price,
     category,
-    stock,
-    createdAt,
-    updatedAt)
+    stock
+  )
 
   return productEntity
 }

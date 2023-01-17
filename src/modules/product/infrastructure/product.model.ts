@@ -11,11 +11,19 @@ export class ProductModel extends Model<any> {
           allowNull: false,
           unique: true
         },
+        name: {
+          type: DataTypes.STRING,
+          allowNull: false
+        },
         description: {
           type: DataTypes.STRING,
           allowNull: false
         },
         image: {
+          type: DataTypes.STRING,
+          allowNull: false
+        },
+        category: {
           type: DataTypes.STRING,
           allowNull: false
         },
